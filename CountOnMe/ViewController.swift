@@ -18,7 +18,7 @@ class ViewController: UIViewController {
     
     // Error check computed variables
     var expressionIsCorrect: Bool {
-        return elements.last != "+" && elements.last != "-"
+        return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "/"
     }
     
     var expressionHaveEnoughElement: Bool {
@@ -26,7 +26,7 @@ class ViewController: UIViewController {
     }
     
     var canAddOperator: Bool {
-        return elements.last != "+" && elements.last != "-"
+        return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "/"
     }
     
     var expressionHaveResult: Bool {
@@ -73,6 +73,37 @@ class ViewController: UIViewController {
         }
     }
 
+    @IBAction func tappedMultiplicationButton(_ sender: UIButton) {
+        if canAddOperator {
+            textView.text.append(" x ")
+        } else {
+            let alertVC = UIAlertController(title: "Zéro!", message: "Un operateur est déja mis !", preferredStyle: .alert)
+            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            self.present(alertVC, animated: true, completion: nil)
+        }
+    }
+    
+    @IBAction func tappedDivisionButton(_ sender: UIButton) {
+        if canAddOperator {
+            textView.text.append(" / ")
+        } else {
+            let alertVC = UIAlertController(title: "Zéro!", message: "Un operateur est déja mis !", preferredStyle: .alert)
+            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            self.present(alertVC, animated: true, completion: nil)
+        }
+    }
+    
+    func soustractionNotWithZero() {
+        if expressionHaveResult {
+         textView.text.append("/" + "0")
+        } else {
+            let alertVC = UIAlertController(title: "Zéro!", message: "Démarrez un nouveau calcul, ne peut être divisible par 0 !", preferredStyle: .alert)
+            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            self.present(alertVC, animated: true, completion: nil)
+            textView.text = ""
+        }
+    }
+    
     @IBAction func tappedEqualButton(_ sender: UIButton) {
         guard expressionIsCorrect else {
             let alertVC = UIAlertController(title: "Zéro!", message: "Entrez une expression correcte !", preferredStyle: .alert)
@@ -99,6 +130,9 @@ class ViewController: UIViewController {
             switch operand {
             case "+": result = left + right
             case "-": result = left - right
+            case "x": result = left * right
+            case "/": result = left / right
+                
             default: fatalError("Unknown operator !")
             }
             
@@ -107,7 +141,34 @@ class ViewController: UIViewController {
         }
         
         textView.text.append(" = \(operationsToReduce.first!)")
-    }
 
+//
+//        var zero = numberButtons[0]
+//        var soustraction = elements.last != "/"
+//
+////            if let zero = 0 {
+//                for soustractionzero in soustraction where zero == [0] {
+//                    return tappedEqualButton(expressionHaveEnoughElement)
+//            }
+//        }
+    
 }
-
+////        is canAddOperator.elements.tappedDivisionButton(tappedNumberButton(numberButtons), 0)
+//        var soustraction = elements.last != "/"
+//        for zero in numberButtons {
+//            if let zero = 0 {
+//                soustraction
+//            }
+//        }
+////        var soustractionIsZero = tappedDivisionButton(<#T##sender: UIButton##UIButton#>)
+//    //        var soustraction = canAddOperator
+//        if numberButtons == [0] {
+//        }
+//        if soustraction {
+//            textView.text.append(" / ")
+//        if numberSoustraction.count == 0 {
+//
+//        } else {
+//
+//    }
+}
