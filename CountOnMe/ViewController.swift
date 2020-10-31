@@ -72,7 +72,7 @@ class ViewController: UIViewController {
             self.present(alertVC, animated: true, completion: nil)
         }
     }
-
+    
     @IBAction func tappedMultiplicationButton(_ sender: UIButton) {
         if canAddOperator {
             textView.text.append(" x ")
@@ -93,15 +93,24 @@ class ViewController: UIViewController {
         }
     }
     
-    func soustractionNotWithZero() {
-        if expressionHaveResult {
-         textView.text.append("/" + "0")
-        } else {
-            let alertVC = UIAlertController(title: "Zéro!", message: "Démarrez un nouveau calcul, ne peut être divisible par 0 !", preferredStyle: .alert)
+//    func divisionNotWithZero() {
+//        if expressionHaveResult {
+//            textView.text.append("/" + "0")
+//        } else {
+//            let alertVC = UIAlertController(title: "Zéro!", message: "Démarrez un nouveau calcul, ne peut être divisible par 0 !", preferredStyle: .alert)
+//            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+//            self.present(alertVC, animated: true, completion: nil)
+//            textView.text = ""
+//        }
+//    }
+    func division(left: Int, right: Int) -> Float? {
+        let result = Float(left / right)
+        if right == 0 {
+            let alertVC = UIAlertController(title: "Zéro!", message: "Ne peut pas être divisible par 0", preferredStyle: .alert)
             alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
             self.present(alertVC, animated: true, completion: nil)
-            textView.text = ""
         }
+        return result
     }
     
     @IBAction func tappedEqualButton(_ sender: UIButton) {
@@ -141,34 +150,34 @@ class ViewController: UIViewController {
         }
         
         textView.text.append(" = \(operationsToReduce.first!)")
-
-//
-//        var zero = numberButtons[0]
-//        var soustraction = elements.last != "/"
-//
-////            if let zero = 0 {
-//                for soustractionzero in soustraction where zero == [0] {
-//                    return tappedEqualButton(expressionHaveEnoughElement)
-//            }
-//        }
+    }
+    //
+    //        var zero = numberButtons[0]
+    //        var soustraction = elements.last != "/"
+    //
+    ////            if let zero = 0 {
+    //                for soustractionzero in soustraction where zero == [0] {
+    //                    return tappedEqualButton(expressionHaveEnoughElement)
+    //            }
+    //        }
     
-}
-////        is canAddOperator.elements.tappedDivisionButton(tappedNumberButton(numberButtons), 0)
-//        var soustraction = elements.last != "/"
-//        for zero in numberButtons {
-//            if let zero = 0 {
-//                soustraction
-//            }
-//        }
-////        var soustractionIsZero = tappedDivisionButton(<#T##sender: UIButton##UIButton#>)
-//    //        var soustraction = canAddOperator
-//        if numberButtons == [0] {
-//        }
-//        if soustraction {
-//            textView.text.append(" / ")
-//        if numberSoustraction.count == 0 {
-//
-//        } else {
-//
-//    }
+    
+    ////        is canAddOperator.elements.tappedDivisionButton(tappedNumberButton(numberButtons), 0)
+    //        var soustraction = elements.last != "/"
+    //        for zero in numberButtons {
+    //            if let zero = 0 {
+    //                soustraction
+    //            }
+    //        }
+    ////        var soustractionIsZero = tappedDivisionButton(<#T##sender: UIButton##UIButton#>)
+    //    //        var soustraction = canAddOperator
+    //        if numberButtons == [0] {
+    //        }
+    //        if soustraction {
+    //            textView.text.append(" / ")
+    //        if numberSoustraction.count == 0 {
+    //
+    //        } else {
+    //
+    //    }
 }
