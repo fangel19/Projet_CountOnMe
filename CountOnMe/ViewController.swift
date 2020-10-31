@@ -103,7 +103,7 @@ class ViewController: UIViewController {
 //            textView.text = ""
 //        }
 //    }
-    func division(left: Int, right: Int) -> Float? {
+    func division(left: Int, right: Int) -> Float {
         let result = Float(left / right)
         if right == 0 {
             let alertVC = UIAlertController(title: "Zéro!", message: "Ne peut pas être divisible par 0", preferredStyle: .alert)
