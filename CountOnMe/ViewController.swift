@@ -57,9 +57,7 @@ class ViewController: UIViewController {
         if canAddOperator {
             textView.text.append(" + ")
         } else {
-            let alertVC = UIAlertController(title: "Zéro!", message: "Un operateur est déja mis !", preferredStyle: .alert)
-            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            self.present(alertVC, animated: true, completion: nil)
+            alertMessage(message: "Un operateur est déja mis !")
         }
     }
     
@@ -67,9 +65,7 @@ class ViewController: UIViewController {
         if canAddOperator {
             textView.text.append(" - ")
         } else {
-            let alertVC = UIAlertController(title: "Zéro!", message: "Un operateur est déja mis !", preferredStyle: .alert)
-            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            self.present(alertVC, animated: true, completion: nil)
+            alertMessage(message: "Un operateur est déja mis !")
         }
     }
     
@@ -77,9 +73,7 @@ class ViewController: UIViewController {
         if canAddOperator {
             textView.text.append(" x ")
         } else {
-            let alertVC = UIAlertController(title: "Zéro!", message: "Un operateur est déja mis !", preferredStyle: .alert)
-            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            self.present(alertVC, animated: true, completion: nil)
+            alertMessage(message: "Un operateur est déja mis !")
         }
     }
     
@@ -87,10 +81,20 @@ class ViewController: UIViewController {
         if canAddOperator {
             textView.text.append(" / ")
         } else {
-            let alertVC = UIAlertController(title: "Zéro!", message: "Un operateur est déja mis !", preferredStyle: .alert)
-            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            self.present(alertVC, animated: true, completion: nil)
+            alertMessage(message: "Un operateur est déja mis !")
         }
+    }
+    
+    @IBAction func tappedAcButton(_ sender: UIButton) {
+        if canAddOperator {
+//            textView.text.append(" 0 ")
+        }
+    }
+    
+    func alertMessage(message: String) {
+        let alertVC = UIAlertController(title: "Erreur!", message: message, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        return self.present(alertVC, animated: true, completion: nil)
     }
     
 //    func divisionNotWithZero() {
@@ -106,24 +110,20 @@ class ViewController: UIViewController {
     func division(left: Int, right: Int) -> Float {
         let result = Float(left / right)
         if right == 0 {
-            let alertVC = UIAlertController(title: "Zéro!", message: "Ne peut pas être divisible par 0", preferredStyle: .alert)
-            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            self.present(alertVC, animated: true, completion: nil)
+            alertMessage(message: "Ne peut pas être divisible par 0")
         }
         return result
     }
     
     @IBAction func tappedEqualButton(_ sender: UIButton) {
         guard expressionIsCorrect else {
-            let alertVC = UIAlertController(title: "Zéro!", message: "Entrez une expression correcte !", preferredStyle: .alert)
-            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            return self.present(alertVC, animated: true, completion: nil)
+            alertMessage(message: "Entrez une expression correcte !")
+            return
         }
         
         guard expressionHaveEnoughElement else {
-            let alertVC = UIAlertController(title: "Zéro!", message: "Démarrez un nouveau calcul !", preferredStyle: .alert)
-            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            return self.present(alertVC, animated: true, completion: nil)
+            alertMessage(message: "Ajouter un opérateur !")
+            return
         }
         
         // Create local copy of operations
@@ -141,6 +141,7 @@ class ViewController: UIViewController {
             case "-": result = left - right
             case "x": result = left * right
             case "/": result = left / right
+                
                 
             default: fatalError("Unknown operator !")
             }
