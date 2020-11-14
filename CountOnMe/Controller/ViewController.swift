@@ -31,7 +31,10 @@ class ViewController: UIViewController {
     
     var expressionHaveResult: Bool {
         return textView.text.firstIndex(of: "=") != nil
+
     }
+
+    
     
     // View Life cycles
     override func viewDidLoad() {
@@ -54,6 +57,10 @@ class ViewController: UIViewController {
     }
     
     @IBAction func tappedAdditionButton(_ sender: UIButton) {
+            guard expressionDontHaveOpatorFirst else {
+                alertMessage(message: "Entrer un nombre !")
+                return
+        }
         if canAddOperator {
             textView.text.append(" + ")
         } else {
@@ -62,14 +69,23 @@ class ViewController: UIViewController {
     }
     
     @IBAction func tappedSubstractionButton(_ sender: UIButton) {
+        guard expressionDontHaveOpatorFirst else {
+            alertMessage(message: "Entrer un nombre !")
+            return
+    }
         if canAddOperator {
             textView.text.append(" - ")
         } else {
             alertMessage(message: "Un operateur est déja mis !")
         }
+        
     }
     
     @IBAction func tappedMultiplicationButton(_ sender: UIButton) {
+        guard expressionDontHaveOpatorFirst else {
+            alertMessage(message: "Entrer un nombre !")
+            return
+    }
         if canAddOperator {
             textView.text.append(" x ")
         } else {
@@ -78,6 +94,10 @@ class ViewController: UIViewController {
     }
     
     @IBAction func tappedDivisionButton(_ sender: UIButton) {
+        guard expressionDontHaveOpatorFirst else {
+            alertMessage(message: "Entrer un nombre !")
+            return
+    }
         if canAddOperator {
             textView.text.append(" / ")
         } else {
@@ -86,10 +106,60 @@ class ViewController: UIViewController {
     }
     
     @IBAction func tappedAcButton(_ sender: UIButton) {
-        if canAddOperator {
-//            textView.text.append(" 0 ")
-        }
+            textView.text = ""
     }
+    
+    var expressionDontHaveOpatorFirst: Bool {
+        return elements.count >= 1
+    }
+//  research
+    
+//    func operandIsCorrect() -> Bool {
+//
+//        var operand = canAddOperator
+//        return textView.text.firstIndex(of: canAddOperator) != nil
+
+//        if let index = operand.first >= 1 {
+//        return true
+//
+//            }
+//        return false
+    
+//    func operandNotFirst() {
+//        if elements.first == "+" {
+//            alertMessage(message: "Ajouter un chiffre")
+//        }
+//        return elements.first != "+" && elements.first != "-" && elements.first != "x" && elements.first != "/"
+//
+//        guard expressionHaveEnoughElement else {
+//            alertMessage(message: "Ajouter un chiffre !")
+//            return
+//        }
+//        var expressionIsNotCorrect: Bool {
+//            return elements.first == "+" && elements.first == "-" && elements.first == "x" && elements.first == "/"
+//        }
+
+    
+//        if textView.text.append(" - \(operationsToReduce.first!)") {
+ 
+//        if textView.text.first == "+" {
+//        } else {
+//            alertMessage(message: "Ajouter un chiffre !")
+//            return
+//        }
+        
+//        if textView.text.first = canAddOperator.alertMessage(message: "Ajouter un chiffre !") {
+//        if textView.text.append(" - \(operationsToReduce.first!)") != nil {
+//
+//        }
+//        guard expressionHaveEnoughElement else {
+//            alertMessage(message: "Ajouter un chiffre !")
+//            return
+            //            var operand = "-" || "=" || "+" || "/" || "x"
+                 //            if operationsToReduce.first! = operand {
+//        }
+
+
     
     func alertMessage(message: String) {
         let alertVC = UIAlertController(title: "Erreur!", message: message, preferredStyle: .alert)
@@ -97,23 +167,24 @@ class ViewController: UIViewController {
         return self.present(alertVC, animated: true, completion: nil)
     }
     
-//    func divisionNotWithZero() {
-//        if expressionHaveResult {
-//            textView.text.append("/" + "0")
-//        } else {
-//            let alertVC = UIAlertController(title: "Zéro!", message: "Démarrez un nouveau calcul, ne peut être divisible par 0 !", preferredStyle: .alert)
-//            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-//            self.present(alertVC, animated: true, completion: nil)
-//            textView.text = ""
-//        }
-//    }
-    func division(left: Int, right: Int) -> Float {
-        let result = Float(left / right)
+    func division(left: Double, right: Double) -> Double {
+        let result = Double(left / right)
         if right == 0 {
             alertMessage(message: "Ne peut pas être divisible par 0")
         }
         return result
     }
+    
+    //    func divisionB(division: Bool) -> (Int, Int) -> Float {
+    //        func div(left: Int, right: Int) -> Float {
+    //            let result = Float(left / right)
+    //            if right == 0 {
+    //                alertMessage(message: "Ne peut pas être divisible par 0")
+    //            } else {
+    //            return result
+    //        }
+    //    }
+    //    }
     
     @IBAction func tappedEqualButton(_ sender: UIButton) {
         guard expressionIsCorrect else {
@@ -122,20 +193,22 @@ class ViewController: UIViewController {
         }
         
         guard expressionHaveEnoughElement else {
-            alertMessage(message: "Ajouter un opérateur !")
+            alertMessage(message: "Ajouter votre calcul !")
             return
         }
-        
         // Create local copy of operations
         var operationsToReduce = elements
-        
-        // Iterate over operations while an operand still here
         while operationsToReduce.count > 1 {
-            let left = Int(operationsToReduce[0])!
-            let operand = operationsToReduce[1]
-            let right = Int(operationsToReduce[2])!
+            var place = 0
+            if let index = operationsToReduce.firstIndex(where: { $0 == "x" || $0 == "/"}) {
+                place = index - 1
+                
+            }
+            let left = Double(operationsToReduce[place])!
+            let operand = operationsToReduce[place + 1]
+            let right = Double(operationsToReduce[place + 2])!
             
-            let result: Int
+            var result: Double = 0.00
             switch operand {
             case "+": result = left + right
             case "-": result = left - right
@@ -145,40 +218,14 @@ class ViewController: UIViewController {
                 
             default: fatalError("Unknown operator !")
             }
+            for _ in 1...3 {
+                operationsToReduce.remove(at: place)
+            }
             
-            operationsToReduce = Array(operationsToReduce.dropFirst(3))
-            operationsToReduce.insert("\(result)", at: 0)
+            operationsToReduce.insert("\(result)", at: place)
+            
         }
-        
         textView.text.append(" = \(operationsToReduce.first!)")
+
     }
-    //
-    //        var zero = numberButtons[0]
-    //        var soustraction = elements.last != "/"
-    //
-    ////            if let zero = 0 {
-    //                for soustractionzero in soustraction where zero == [0] {
-    //                    return tappedEqualButton(expressionHaveEnoughElement)
-    //            }
-    //        }
-    
-    
-    ////        is canAddOperator.elements.tappedDivisionButton(tappedNumberButton(numberButtons), 0)
-    //        var soustraction = elements.last != "/"
-    //        for zero in numberButtons {
-    //            if let zero = 0 {
-    //                soustraction
-    //            }
-    //        }
-    ////        var soustractionIsZero = tappedDivisionButton(<#T##sender: UIButton##UIButton#>)
-    //    //        var soustraction = canAddOperator
-    //        if numberButtons == [0] {
-    //        }
-    //        if soustraction {
-    //            textView.text.append(" / ")
-    //        if numberSoustraction.count == 0 {
-    //
-    //        } else {
-    //
-    //    }
 }
