@@ -12,29 +12,27 @@ class ViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!
     @IBOutlet var numberButtons: [UIButton]!
     
+    var calculator = Calculator()
+    
     var elements: [String] {
         return textView.text.split(separator: " ").map { "\($0)" }
     }
     
-    // Error check computed variables
-    var expressionIsCorrect: Bool {
-        return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "/"
-    }
-    
-    var expressionHaveEnoughElement: Bool {
-        return elements.count >= 3
-    }
-    
-    var canAddOperator: Bool {
-        return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "/"
-    }
-    
     var expressionHaveResult: Bool {
         return textView.text.firstIndex(of: "=") != nil
-
     }
-
+    // Error check computed variables
+//    var expressionIsCorrect: Bool {
+//        return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "/"
+//    }
     
+//    var expressionHaveEnoughElement: Bool {
+//        return elements.count >= 3
+//    }
+//
+//    var canAddOperator: Bool {
+//        return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "/"
+//    }
     
     // View Life cycles
     override func viewDidLoad() {
@@ -57,11 +55,11 @@ class ViewController: UIViewController {
     }
     
     @IBAction func tappedAdditionButton(_ sender: UIButton) {
-            guard expressionDontHaveOpatorFirst else {
+        guard calculator.expressionDontHaveOpatorFirst(elements: elements) else {
                 alertMessage(message: "Entrer un nombre !")
                 return
         }
-        if canAddOperator {
+        if calculator.canAddOperator(elements: elements) {
             textView.text.append(" + ")
         } else {
             alertMessage(message: "Un operateur est déja mis !")
@@ -69,11 +67,11 @@ class ViewController: UIViewController {
     }
     
     @IBAction func tappedSubstractionButton(_ sender: UIButton) {
-        guard expressionDontHaveOpatorFirst else {
+        guard calculator.expressionDontHaveOpatorFirst(elements: elements) else {
             alertMessage(message: "Entrer un nombre !")
             return
     }
-        if canAddOperator {
+        if calculator.canAddOperator(elements: elements) {
             textView.text.append(" - ")
         } else {
             alertMessage(message: "Un operateur est déja mis !")
@@ -82,11 +80,11 @@ class ViewController: UIViewController {
     }
     
     @IBAction func tappedMultiplicationButton(_ sender: UIButton) {
-        guard expressionDontHaveOpatorFirst else {
+        guard calculator.expressionDontHaveOpatorFirst(elements: elements) else {
             alertMessage(message: "Entrer un nombre !")
             return
     }
-        if canAddOperator {
+        if calculator.canAddOperator(elements: elements) {
             textView.text.append(" x ")
         } else {
             alertMessage(message: "Un operateur est déja mis !")
@@ -94,11 +92,11 @@ class ViewController: UIViewController {
     }
     
     @IBAction func tappedDivisionButton(_ sender: UIButton) {
-        guard expressionDontHaveOpatorFirst else {
+        guard calculator.expressionDontHaveOpatorFirst(elements: elements) else {
             alertMessage(message: "Entrer un nombre !")
             return
     }
-        if canAddOperator {
+        if calculator.canAddOperator(elements: elements) {
             textView.text.append(" / ")
         } else {
             alertMessage(message: "Un operateur est déja mis !")
@@ -109,9 +107,9 @@ class ViewController: UIViewController {
             textView.text = ""
     }
     
-    var expressionDontHaveOpatorFirst: Bool {
-        return elements.count >= 1
-    }
+//    var expressionDontHaveOpatorFirst: Bool {
+//        return elements.count >= 1
+//    }
 //  research
     
 //    func operandIsCorrect() -> Bool {
@@ -187,12 +185,12 @@ class ViewController: UIViewController {
     //    }
     
     @IBAction func tappedEqualButton(_ sender: UIButton) {
-        guard expressionIsCorrect else {
+        guard calculator.expressionIsCorrect(elements: elements) else {
             alertMessage(message: "Entrez une expression correcte !")
             return
         }
         
-        guard expressionHaveEnoughElement else {
+        guard calculator.expressionHaveEnoughElement(elements: elements) else {
             alertMessage(message: "Ajouter votre calcul !")
             return
         }
