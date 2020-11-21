@@ -16,13 +16,13 @@ class ViewController: UIViewController {
     
     var calculator = Calculator()
     
-    var elements: [String] {
-        return textView.text.split(separator: " ").map { "\($0)" }
-    }
+    //    var elements: [String] {
+    //        return textView.text.split(separator: " ").map { "\($0)" }
+    //    }
     
-    var expressionHaveResult: Bool {
-        return textView.text.firstIndex(of: "=") != nil
-    }
+    //    var expressionHaveResult: Bool {
+    //        return textView.text.firstIndex(of: "=") != nil
+    //    }
     
     // MARK: - viewDidLoad
     
@@ -32,7 +32,6 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
-    
     // MARK: - NumberButton
     
     @IBAction func tappedNumberButton(_ sender: UIButton) {
@@ -40,7 +39,7 @@ class ViewController: UIViewController {
             return
         }
         
-        if expressionHaveResult {
+        if calculator.expressionHaveResult {
             textView.text = ""
         }
         
@@ -50,100 +49,28 @@ class ViewController: UIViewController {
     // MARK: - Operator
     
     @IBAction func tappedAdditionButton(_ sender: UIButton) {
-        guard calculator.expressionDontHaveOpatorFirst(elements: elements) else {
-            alertMessage("Entrer un nombre !")
-            return
-        }
-        if calculator.canAddOperator(elements: elements) {
-            textView.text.append(" + ")
-        } else {
-            alertMessage("Un operateur est déja mis !")
-        }
+        calculator.tappedAddition()
     }
     
     @IBAction func tappedSubstractionButton(_ sender: UIButton) {
-        guard calculator.expressionDontHaveOpatorFirst(elements: elements) else {
-            alertMessage("Entrer un nombre !")
-            return
-        }
-        if calculator.canAddOperator(elements: elements) {
-            textView.text.append(" - ")
-        } else {
-            alertMessage("Un operateur est déja mis !")
-        }
-        
+        calculator.tappedSubstration()
     }
     
     @IBAction func tappedMultiplicationButton(_ sender: UIButton) {
-        guard calculator.expressionDontHaveOpatorFirst(elements: elements) else {
-            alertMessage("Entrer un nombre !")
-            return
-        }
-        if calculator.canAddOperator(elements: elements) {
-            textView.text.append(" x ")
-        } else {
-            alertMessage("Un operateur est déja mis !")
-        }
+        calculator.tappedMultiplication()
     }
     
     @IBAction func tappedDivisionButton(_ sender: UIButton) {
-        guard calculator.expressionDontHaveOpatorFirst(elements: elements) else {
-            alertMessage("Entrer un nombre !")
-            return
-        }
-        if calculator.canAddOperator(elements: elements) {
-            textView.text.append(" / ")
-        } else {
-            alertMessage("Un operateur est déja mis !")
-        }
+        calculator.tappedDivision()
     }
     
     @IBAction func tappedAcButton(_ sender: UIButton) {
         textView.text = ""
     }
     
-    
     @IBAction func tappedEqualButton(_ sender: UIButton) {
-        guard calculator.expressionIsCorrect(elements: elements) else {
-            alertMessage("Entrez une expression correcte !")
-            return
-        }
-        
-        guard calculator.expressionHaveEnoughElement(elements: elements) else {
-            alertMessage("Ajouter votre calcul !")
-            return
-        }
-        var operationsToReduce = elements
-        while operationsToReduce.count > 1 {
-            var place = 0
-            if let index = operationsToReduce.firstIndex(where: { $0 == "x" || $0 == "/"}) {
-                place = index - 1
-                
-            }
-            let left = Double(operationsToReduce[place])!
-            let operand = operationsToReduce[place + 1]
-            let right = Double(operationsToReduce[place + 2])!
-            
-            var result: Double = 0.00
-            switch operand {
-            case "+": result = left + right
-            case "-": result = left - right
-            case "x": result = left * right
-            case "/": result = calculator.division(left: left, right: right)
-                
-                
-            default: alertMessage("Demarrez un nouveau calcul")
-                return tappedNumberButton(sender)
-            }
-            for _ in 1...3 {
-                operationsToReduce.remove(at: place)
-            }
-            
-            operationsToReduce.insert("\(result)", at: place)
-            
-        }
-        textView.text.append(" = \(operationsToReduce.first!)")
-        
+        calculator.tappedEqual()
+        calculator.equal()
     }
 }
 // MARK: - Extension
@@ -154,6 +81,4 @@ extension ViewController: AlertDelagate {
         alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
         return self.present(alertVC, animated: true, completion: nil)
     }
-    
-    
 }
