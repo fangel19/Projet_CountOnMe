@@ -5,11 +5,11 @@
 //  Created by angelique fourny on 27/10/2020.
 //  Copyright © 2020 Vincent Saluzzo. All rights reserved.
 //
-
 import Foundation
 
 protocol AlertDelagate: AnyObject {
     func alertMessage(_ message: String)
+    func didReceiveData(_ data: String)
 }
 class Calculator {
     weak var delegate: AlertDelagate?
@@ -17,15 +17,20 @@ class Calculator {
         delegate?.alertMessage(message)
     }
     
+    private func sendDataToController(data: String) {
+        delegate?.didReceiveData(data)
+    }
     var textView = ""
     
     var elements: [String] {
         return textView.split(separator: " ").map { "\($0)" }
     }
-    var expressionHaveResult: Bool {
-        return textView.firstIndex(of: "=") != nil
+    //    var expressionHaveResult: Bool {
+    //        return textView.firstIndex(of: "=") != nil
+    //    }
+    private func expressionHaveResult(expression: String) -> Bool {
+        return expression.firstIndex(of: "=") != nil
     }
-    
     func expressionIsCorrect(elements: [String]) -> Bool {
         return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "/"
     }
@@ -40,16 +45,26 @@ class Calculator {
         return elements.count >= 1
     }
     
+    func addStringNumber(stringNumber: String) {
+        if expressionHaveResult(expression: textView) {
+            textView = ""
+        }
+        textView += stringNumber
+        sendDataToController(data: stringNumber)
+    }
+    
+    
     func tappedAddition() {
         guard expressionDontHaveOpatorFirst(elements: elements) else {
             delegate?.alertMessage("Entrer un nombre !")
             return
         }
         if canAddOperator(elements: elements) {
-            textView.append(" + ")
+            textView += " + "
         } else {
             delegate?.alertMessage("Un operateur est déja mis !")
         }
+        return sendDataToController(data: "+")
     }
     
     func tappedSubstration() {
@@ -58,10 +73,11 @@ class Calculator {
             return
         }
         if canAddOperator(elements: elements) {
-            textView.append(" - ")
+            textView += " - "
         } else {
             delegate?.alertMessage("Un operateur est déja mis !")
         }
+        return sendDataToController(data: "-")
     }
     
     func tappedMultiplication() {
@@ -70,10 +86,11 @@ class Calculator {
             return
         }
         if canAddOperator(elements: elements) {
-            textView.append(" x ")
+            textView += " x "
         } else {
             delegate?.alertMessage("Un operateur est déja mis !")
         }
+        return sendDataToController(data: "x")
     }
     
     func tappedDivision() {
@@ -82,10 +99,11 @@ class Calculator {
             return
         }
         if canAddOperator(elements: elements) {
-            textView.append(" / ")
+            textView += " / "
         } else {
             delegate?.alertMessage("Un operateur est déja mis !")
         }
+        return sendDataToController(data: "/")
     }
     
     func tappedEqual() {
@@ -108,7 +126,19 @@ class Calculator {
         return result
     }
     
+    func checkRightTab(place: Int, right: Int, array: [Any]) {
+        let place = 0
+        let operationsToReduce = elements
+        
+        if (place + right) < operationsToReduce.count {
+            delegate?.alertMessage("entrer un chiffre")
+        } else {
+            return
+        }
+    }
+    
     func equal() {
+        
         var operationsToReduce = elements
         while operationsToReduce.count > 1 {
             var place = 0
@@ -116,28 +146,36 @@ class Calculator {
                 place = index - 1
                 
             }
-            let left = Double(operationsToReduce[place])!
+            guard let left = Double(operationsToReduce[place]) else {
+                return }
             let operand = operationsToReduce[place + 1]
-            let right = Double(operationsToReduce[place + 2])!
             
-            var result: Double = 0.00
-            switch operand {
-            case "+": result = left + right
-            case "-": result = left - right
-            case "x": result = left * right
-            case "/": result = division(left: left, right: right)
-                
-            default: delegate?.alertMessage("Demarrez un nouveau calcul")
-                return textView.append("")
+            guard let right = Double(checkRightTab(place: 0, right: 2, array: [operationsToReduce])) else {
+                return
             }
-            for _ in 1...3 {
-                operationsToReduce.remove(at: place)
+            guard let right = Double(operationsToReduce) else {
+                checkRightTab(place: 0, right: 2, array: [operationsToReduce])
+                return
             }
+        
+        var result: Double = 0.00
+        switch operand {
+        case "+": result = left + right
+        case "-": result = left - right
+        case "x": result = left * right
+        case "/": result = division(left: left, right: right)
             
-            operationsToReduce.insert("\(result)", at: place)
+        default: delegate?.alertMessage("Demarrez un nouveau calcul")
+            return textView.append("")
         }
-//        textView.append(" = \(operationsToReduce.first!)")
-
+        for _ in 1...3 {
+            operationsToReduce.remove(at: place)
+        }
+        
+        operationsToReduce.insert("\(result)", at: place)
     }
+    textView += " = \(operationsToReduce.first ?? "= Error")"
+    sendDataToController(data: textView)
+    
 }
-
+}

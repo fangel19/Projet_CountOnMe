@@ -5,7 +5,6 @@
 //  Created by Vincent Saluzzo on 29/03/2019.
 //  Copyright © 2019 Vincent Saluzzo. All rights reserved.
 //
-
 import UIKit
 
 class ViewController: UIViewController {
@@ -38,12 +37,10 @@ class ViewController: UIViewController {
         guard let numberText = sender.title(for: .normal) else {
             return
         }
+    
+        //textView.text.append(numberText)
+        calculator.addStringNumber(stringNumber: numberText)
         
-        if calculator.expressionHaveResult {
-            textView.text = ""
-        }
-        
-        textView.text.append(numberText)
     }
     
     // MARK: - Operator
@@ -66,6 +63,7 @@ class ViewController: UIViewController {
     
     @IBAction func tappedAcButton(_ sender: UIButton) {
         textView.text = ""
+        calculator.textView = ""
     }
     
     @IBAction func tappedEqualButton(_ sender: UIButton) {
@@ -74,11 +72,22 @@ class ViewController: UIViewController {
     }
 }
 // MARK: - Extension
-
 extension ViewController: AlertDelagate {
     func alertMessage(_ message: String) {
         let alertVC = UIAlertController(title: "Erreur!", message: message, preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
         return self.present(alertVC, animated: true, completion: nil)
     }
+    
+    func didReceiveData(_ data: String) {
+    //    if data == "result" {
+            textView.text = calculator.textView
+//        } else {
+//            let alertVC = UIAlertController(title: "ERROR", message: data, preferredStyle: .alert)
+//            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+//            present(alertVC, animated: true, completion: nil)
+//        }
+    }
+
+    
 }
