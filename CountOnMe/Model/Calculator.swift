@@ -126,14 +126,13 @@ class Calculator {
         return result
     }
     
-    func checkRightTab(place: Int, right: Int, array: [Any]) {
-        let place = 0
-        let operationsToReduce = elements
+    func checkRightTab(place: Int, right: Int, array: [Any]) -> Bool {
         
-        if (place + right) < operationsToReduce.count {
-            delegate?.alertMessage("entrer un chiffre")
+        if (place + right) < array.count {
+            delegate?.alertMessage("entrer un nombre")
+            return true
         } else {
-            return
+            return false
         }
     }
     
@@ -144,38 +143,35 @@ class Calculator {
             var place = 0
             if let index = operationsToReduce.firstIndex(where: { $0 == "x" || $0 == "/"}) {
                 place = index - 1
-                
             }
-            guard let left = Double(operationsToReduce[place]) else {
-                return }
+            guard let left = Double(operationsToReduce[place]) else { return }
+            
             let operand = operationsToReduce[place + 1]
             
-            guard let right = Double(checkRightTab(place: 0, right: 2, array: [operationsToReduce])) else {
-                return
+            if !checkRightTab(place: place, right: 2, array: [operationsToReduce]) {
+                guard let right = Double(operationsToReduce[place + 2]) else { return }
+                
+                
+                var result: Double = 0.00
+                switch operand {
+                case "+": result = left + right
+                case "-": result = left - right
+                case "x": result = left * right
+                case "/": result = division(left: left, right: right)
+                    
+                default: delegate?.alertMessage("Demarrez un nouveau calcul")
+                    return textView.append("")
+                }
+                for _ in 1...3 {
+                    operationsToReduce.remove(at: place)
+                }
+                
+                operationsToReduce.insert("\(result)", at: place)
             }
-            guard let right = Double(operationsToReduce) else {
-                checkRightTab(place: 0, right: 2, array: [operationsToReduce])
-                return
-            }
-        
-        var result: Double = 0.00
-        switch operand {
-        case "+": result = left + right
-        case "-": result = left - right
-        case "x": result = left * right
-        case "/": result = division(left: left, right: right)
+            textView += " = \(operationsToReduce.first ?? "= Error")"
+            sendDataToController(data: textView)
             
-        default: delegate?.alertMessage("Demarrez un nouveau calcul")
-            return textView.append("")
         }
-        for _ in 1...3 {
-            operationsToReduce.remove(at: place)
-        }
-        
-        operationsToReduce.insert("\(result)", at: place)
     }
-    textView += " = \(operationsToReduce.first ?? "= Error")"
-    sendDataToController(data: textView)
-    
 }
-}
+
