@@ -7,9 +7,12 @@
 //
 
 import XCTest
-@testable import SimpleCalc
+@testable import CountOnMe
 
 class SimpleCalcTests: XCTestCase {
+    
+    var calculator: Calculator!
+    
 
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.

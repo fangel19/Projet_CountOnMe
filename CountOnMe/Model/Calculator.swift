@@ -25,9 +25,7 @@ class Calculator {
     var elements: [String] {
         return textView.split(separator: " ").map { "\($0)" }
     }
-    //    var expressionHaveResult: Bool {
-    //        return textView.firstIndex(of: "=") != nil
-    //    }
+
     private func expressionHaveResult(expression: String) -> Bool {
         return expression.firstIndex(of: "=") != nil
     }
@@ -116,6 +114,7 @@ class Calculator {
             delegate?.alertMessage("Ajouter votre calcul !")
             return
         }
+        equal()
     }
     
     func division(left: Double, right: Double) -> Double {
@@ -127,11 +126,12 @@ class Calculator {
     }
     
     func checkRightTab(place: Int, right: Int, array: [Any]) -> Bool {
-        
-        if (place + right) < array.count {
+        if (place + right) >= array.count {
+            print("count array", array.count, "place + right", place + right)
             delegate?.alertMessage("entrer un nombre")
             return true
         } else {
+            
             return false
         }
     }
@@ -148,7 +148,10 @@ class Calculator {
             
             let operand = operationsToReduce[place + 1]
             
-            if !checkRightTab(place: place, right: 2, array: [operationsToReduce]) {
+            if checkRightTab(place: place, right: 2, array: operationsToReduce) {
+                print("casse")
+                return
+            }
                 guard let right = Double(operationsToReduce[place + 2]) else { return }
                 
                 
@@ -162,12 +165,12 @@ class Calculator {
                 default: delegate?.alertMessage("Demarrez un nouveau calcul")
                     return textView.append("")
                 }
-                for _ in 1...3 {
+            for _ in 1...operationsToReduce.count {
                     operationsToReduce.remove(at: place)
                 }
                 
                 operationsToReduce.insert("\(result)", at: place)
-            }
+            
             textView += " = \(operationsToReduce.first ?? "= Error")"
             sendDataToController(data: textView)
             

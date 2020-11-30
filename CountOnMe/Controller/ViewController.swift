@@ -68,7 +68,7 @@ class ViewController: UIViewController {
     
     @IBAction func tappedEqualButton(_ sender: UIButton) {
         calculator.tappedEqual()
-        calculator.equal()
+//        calculator.equal()
     }
 }
 // MARK: - Extension
