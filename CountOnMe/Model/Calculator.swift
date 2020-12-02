@@ -165,7 +165,8 @@ class Calculator {
                 default: delegate?.alertMessage("Demarrez un nouveau calcul")
                     return textView.append("")
                 }
-            for _ in 1...operationsToReduce.count {
+            print(operationsToReduce.count)
+            for _ in 1...3 {
                     operationsToReduce.remove(at: place)
                 }
                 
