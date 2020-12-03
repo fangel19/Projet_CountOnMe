@@ -165,17 +165,18 @@ class Calculator {
                 default: delegate?.alertMessage("Demarrez un nouveau calcul")
                     return textView.append("")
                 }
-            print(operationsToReduce.count)
+            
             for _ in 1...3 {
                     operationsToReduce.remove(at: place)
                 }
                 
                 operationsToReduce.insert("\(result)", at: place)
             
-            textView += " = \(operationsToReduce.first ?? "= Error")"
-            sendDataToController(data: textView)
-            
         }
+        
+        textView += " = \(operationsToReduce.first ?? "= Error")"
+        sendDataToController(data: textView)
+        
     }
 }
 

@@ -30,10 +30,8 @@ class CalculatorTests: XCTestCase {
         calculator.addStringNumber(stringNumber: "1")
         
         calculator.equal()
-        
-        calculator.equal()
-        
-        XCTAssert(calculator.textView == "1 + 1 * 1 / 1 - 1 = 1")
+                
+        XCTAssert(calculator.textView == "1 + 1 - 1 / 1 * 1 = 1.0")
     }
 
     override func setUpWithError() throws {
