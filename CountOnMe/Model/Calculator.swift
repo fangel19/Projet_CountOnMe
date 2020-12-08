@@ -51,7 +51,6 @@ class Calculator {
         sendDataToController(data: stringNumber)
     }
     
-    
     func tappedAddition() {
         guard expressionDontHaveOpatorFirst(elements: elements) else {
             delegate?.alertMessage("Entrer un nombre !")
