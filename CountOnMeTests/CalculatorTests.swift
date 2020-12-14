@@ -47,6 +47,17 @@ class CalculatorTests: XCTestCase {
         XCTAssert(calculator.textView == "42 + 10 = 52.0")
     }
     
+    func testBigNumbers_WhenTappedNumbers_ThenGiveResult() {
+        calculator.addStringNumber(stringNumber: "200")
+        calculator.tappedEqual()
+        calculator.tappedAddition()
+        calculator.addStringNumber(stringNumber: "1")
+        calculator.tappedEqual()
+        calculator.tappedEqual()
+        
+        XCTAssert(calculator.textView == "200 + 1 = 201.0")
+    }
+    
     //    MARK: - Test expression is not correct
     
     func testexpressionIsNotCorrect_WhenExpressionIsNotCorrect_ThenReturnAlertMessage() {
@@ -163,9 +174,8 @@ class CalculatorTests: XCTestCase {
     }
     
     func testCheckRightTab_WhenPlaceSupInArray_ThenMessageError() {
-        calculator.checkRightTab(place: 1, right: 2, array: [3])
-        
-        XCTAssert(calculator.textView == "")
+        XCTAssert(calculator.checkRightTab(place: 0, right: 2, array: [2]))
+        XCTAssertTrue(calculator.textView == "")
     }
     
     func testSendToController_WhenInErrorMessageShouldAppear_ThenUseTheDelegate() {

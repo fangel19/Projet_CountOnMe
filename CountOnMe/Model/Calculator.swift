@@ -148,7 +148,6 @@ class Calculator {
             let operand = operationsToReduce[place + 1]
             
             if checkRightTab(place: place, right: 2, array: operationsToReduce) {
-                print("casse")
                 return
             }
                 guard let right = Double(operationsToReduce[place + 2]) else { return }
