@@ -166,6 +166,7 @@ class CalculatorTests: XCTestCase {
         XCTAssert(calculator.textView == "1 x ")
     }
     
+    //    MARK: - Tapped equal after one number
     func testEqual_WhenWeTappedEqualAfterNumberOne_ThenReturnAlertMessage() {
         calculator.addStringNumber(stringNumber: "1")
         calculator.tappedEqual()
@@ -173,15 +174,7 @@ class CalculatorTests: XCTestCase {
         XCTAssert(calculator.textView == "1")
     }
     
-    func testCheckRightTab_WhenPlaceSupInArray_ThenMessageError() {
-        XCTAssert(calculator.checkRightTab(place: 0, right: 2, array: [2]))
-        XCTAssertTrue(calculator.textView == "")
-    }
-    
-    func testSendToController_WhenInErrorMessageShouldAppear_ThenUseTheDelegate() {
-        calculator.delegate?.alertMessage("")
-    }
-    
+    //    MARK: - Tests tapped two equal at the result
     func testAddtwoEqual_WhenTappedtwoEqual_ThenReturnMessageError() {
         calculator.addStringNumber(stringNumber: "3")
         calculator.tappedMultiplication()
@@ -192,12 +185,15 @@ class CalculatorTests: XCTestCase {
         XCTAssert(calculator.textView == "3 x 1 = 3.0")
     }
     
+    func testSendToController_WhenInErrorMessageShouldAppear_ThenUseTheDelegate() {
+        calculator.delegate?.alertMessage("")
+    }
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
     
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        calculator = nil
     }
     
     func testExample() throws {

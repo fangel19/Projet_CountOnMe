@@ -8,42 +8,31 @@
 import UIKit
 
 class ViewController: UIViewController {
-    // MARK: - Outlet var
+    
+    // MARK: - Outlet and var
     
     @IBOutlet weak var textView: UITextView!
     @IBOutlet var numberButtons: [UIButton]!
     
     var calculator = Calculator()
     
-    //    var elements: [String] {
-    //        return textView.text.split(separator: " ").map { "\($0)" }
-    //    }
-    
-    //    var expressionHaveResult: Bool {
-    //        return textView.text.firstIndex(of: "=") != nil
-    //    }
-    
     // MARK: - viewDidLoad
     
     override func viewDidLoad() {
         super.viewDidLoad()
         calculator.delegate = self
-        // Do any additional setup after loading the view.
     }
     
-    // MARK: - NumberButton
+    // MARK: - Action Number Button
     
     @IBAction func tappedNumberButton(_ sender: UIButton) {
         guard let numberText = sender.title(for: .normal) else {
             return
         }
-    
-        //textView.text.append(numberText)
         calculator.addStringNumber(stringNumber: numberText)
-        
     }
     
-    // MARK: - Operator
+    // MARK: - Actions Operator
     
     @IBAction func tappedAdditionButton(_ sender: UIButton) {
         calculator.tappedAddition()
@@ -68,26 +57,20 @@ class ViewController: UIViewController {
     
     @IBAction func tappedEqualButton(_ sender: UIButton) {
         calculator.tappedEqual()
-//        calculator.equal()
+        //        calculator.equal()
     }
 }
+
 // MARK: - Extension
+// Display error message
 extension ViewController: AlertDelagate {
     func alertMessage(_ message: String) {
         let alertVC = UIAlertController(title: "Erreur!", message: message, preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
         return self.present(alertVC, animated: true, completion: nil)
     }
-    
+    //    Display text on calculator
     func didReceiveData(_ data: String) {
-    //    if data == "result" {
-            textView.text = calculator.textView
-//        } else {
-//            let alertVC = UIAlertController(title: "ERROR", message: data, preferredStyle: .alert)
-//            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-//            present(alertVC, animated: true, completion: nil)
-//        }
+        textView.text = calculator.textView
     }
-
-    
 }

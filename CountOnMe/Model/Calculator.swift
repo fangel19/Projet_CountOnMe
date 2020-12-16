@@ -6,17 +6,21 @@
 //  Copyright © 2020 Vincent Saluzzo. All rights reserved.
 //
 import Foundation
+//MARK: - Protocole
 
 protocol AlertDelagate: AnyObject {
     func alertMessage(_ message: String)
     func didReceiveData(_ data: String)
 }
+//MARK: - Class Calculator
+
 class Calculator {
+    //    Function Alert Message
     weak var delegate: AlertDelagate?
     private func sendToController(message: String) {
         delegate?.alertMessage(message)
     }
-    
+    //    Function data display
     private func sendDataToController(data: String) {
         delegate?.didReceiveData(data)
     }
@@ -25,10 +29,13 @@ class Calculator {
     var elements: [String] {
         return textView.split(separator: " ").map { "\($0)" }
     }
-
+    
+    //    MARK: - Expression to check if the calculat is possible
+    
     private func expressionHaveResult(expression: String) -> Bool {
         return expression.firstIndex(of: "=") != nil
     }
+    
     func expressionIsCorrect(elements: [String]) -> Bool {
         return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "/"
     }
@@ -36,9 +43,11 @@ class Calculator {
     func canAddOperator(elements: [String]) -> Bool {
         return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "/"
     }
+    
     func expressionHaveEnoughElement(elements: [String]) -> Bool {
         return elements.count >= 3
     }
+    
     func expressionDontHaveOpatorFirst(elements: [String]) -> Bool {
         return elements.count >= 1
     }
@@ -50,6 +59,8 @@ class Calculator {
         textView += stringNumber
         sendDataToController(data: stringNumber)
     }
+    
+    //    MARK: - Error handling for operators and display
     
     func tappedAddition() {
         guard expressionDontHaveOpatorFirst(elements: elements) else {
@@ -108,7 +119,6 @@ class Calculator {
             delegate?.alertMessage("Entrez une expression correcte !")
             return
         }
-        
         guard expressionHaveEnoughElement(elements: elements) else {
             delegate?.alertMessage("Ajouter votre calcul !")
             return
@@ -116,6 +126,7 @@ class Calculator {
         equal()
     }
     
+    // Function for division is not possible with 0
     func division(left: Double, right: Double) -> Double {
         let result = Double(left / right)
         if right == 0 {
@@ -124,16 +135,7 @@ class Calculator {
         return result
     }
     
-    func checkRightTab(place: Int, right: Int, array: [Any]) -> Bool {
-        if (place + right) >= array.count {
-            print("count array", array.count, "place + right", place + right)
-            delegate?.alertMessage("entrer un nombre")
-            return true
-        } else {
-            
-            return false
-        }
-    }
+    //    MARK: - function to display the result of the operation
     
     func equal() {
         
@@ -146,35 +148,28 @@ class Calculator {
             guard let left = Double(operationsToReduce[place]) else { return }
             
             let operand = operationsToReduce[place + 1]
+
+            guard let right = Double(operationsToReduce[place + 2]) else { return }
             
-            if checkRightTab(place: place, right: 2, array: operationsToReduce) {
-                return
+            var result: Double = 0.00
+            switch operand {
+            case "+": result = left + right
+            case "-": result = left - right
+            case "x": result = left * right
+            case "/": result = division(left: left, right: right)
+                
+            default: delegate?.alertMessage("Demarrez un nouveau calcul")
+                return textView.append("")
             }
-                guard let right = Double(operationsToReduce[place + 2]) else { return }
-                
-                
-                var result: Double = 0.00
-                switch operand {
-                case "+": result = left + right
-                case "-": result = left - right
-                case "x": result = left * right
-                case "/": result = division(left: left, right: right)
-                    
-                default: delegate?.alertMessage("Demarrez un nouveau calcul")
-                    return textView.append("")
-                }
             
             for _ in 1...3 {
-                    operationsToReduce.remove(at: place)
-                }
-                
-                operationsToReduce.insert("\(result)", at: place)
+                operationsToReduce.remove(at: place)
+            }
             
+            operationsToReduce.insert("\(result)", at: place)
         }
         
         textView += " = \(operationsToReduce.first ?? "= Error")"
         sendDataToController(data: textView)
-        
     }
 }
-
